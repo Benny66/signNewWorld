@@ -1,8 +1,67 @@
 
+## 简介
+这是一个让你免费！科学！上网的脚本。
+
+原理是：定时登录新界并签到，签到获取4小时的免费使用时间，每天手动切换ClashX配置，实现科学上网。
+
+比如我设置的这个脚本会定时每天在8点55分，12点55分，16点55分，20点55分运行脚本（也就是0 55 8,12,16,20 * * *）
+### 配置文件
+```
+## 账号列表
+ACCOUNT_PREFIXES=ACCOUNT1,ACCOUNT2,ACCOUNT3,ACCOUNT4
+#第一个账号
+ACCOUNT1_USER="xxx@gmail.com"
+ACCOUNT1_PASS="x"xx
+ACCOUNT1_CRON="0 55 8 * * *" # 每天早上8点55分运行
+ACCOUNT1_DELAY="240" # 随机延迟240秒，防止ban
+#第二个账号
+ACCOUNT2_USER="xxxx@qq.com"
+ACCOUNT2_PASS="xxxx"
+ACCOUNT2_CRON="0 55 12 * * *" # 每天中午12点55分运行
+ACCOUNT2_DELAY="240"
+#第三个账号
+ACCOUNT3_USER="xxx@163.com"
+ACCOUNT3_PASS="xxxx"
+ACCOUNT3_CRON="0 55 16 * * *" # 每天下午4点55分运行
+ACCOUNT3_DELAY="10"
+#第四个账号
+ACCOUNT4_USER="xxx@139.com"
+ACCOUNT4_PASS="xxx"
+ACCOUNT4_CRON="0 55 20 * * *" # 每天晚上8点55分运行
+ACCOUNT4_DELAY="240"
+#more accounts can be added here
+```
+
+## 如何使用？
+
+### 先配置好账号密码（后面详细可知怎么获取）
+```
+copy .env.example .env
+```
+然后编辑你的多个账号密码
+注意：配置文件.env需要在程序的同一目录
+
+### 直接使用
+找到你系统的可执行文件，比如我的是：
+```
+./signNewWorld 
+```
+![image.png](./images/goreleaser.png)
+### 编译使用
+```
+make init
+make run
+```
+
+### 运行项目
+![image.png](./images/run_project.png)
+
+
+
+## 详细使用
 ### 科学上网的平台
 新界
 https://neworld.work/
-
 
 
 ### 注册账号
@@ -31,17 +90,24 @@ https://neworld.work/user/invite
 
 ![image.png](./images/clashX_config.png)
 
-### 直接使用
+
+## goreleaser打包使用
+可访问链接[https://goreleaser.com/quick-start/](https://goreleaser.com/quick-start/)
+
+下载安装goreleaser
 ```
-./signNewWorld 
+go install github.com/goreleaser/goreleaser@latest
+```
+如果只本地打包出可执行文件
+
+```
+goreleaser release --snapshot --clean
 ```
 
+如果需要上传到github并清除dist目录
 
-### 编译使用
 ```
-go build 
-或者
-go run .
+goreleaser release --clean
 ```
 
-![image.png](./images/run_project.png)
+![image.png](./images/goreleaser.png)
