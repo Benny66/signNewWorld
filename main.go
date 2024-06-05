@@ -4,8 +4,11 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
+	"os"
+	"os/signal"
 	"signNewWorld/config"
 	"signNewWorld/newWorld"
+	"syscall"
 	"time"
 
 	"github.com/robfig/cron/v3"
@@ -38,6 +41,24 @@ func main() {
 
 	// 启动cron调度器
 	c.Start()
+
+	// 创建一个通道用于接收信号
+	interrupt := make(chan os.Signal, 1)
+	signal.Notify(interrupt, os.Interrupt, syscall.SIGTERM)
+
+	// 在新的goroutine中阻塞，直到接收到中断信号
+	go func() {
+		<-interrupt
+		fmt.Println("接收到中断信号，程序将优雅退出...")
+
+		// 停止cron调度器
+		c.Stop()
+
+		// 这里可以添加其他清理工作
+
+		fmt.Println("程序已退出。")
+		os.Exit(0)
+	}()
 
 	// 阻塞主线程，直到程序被中断
 	select {}
